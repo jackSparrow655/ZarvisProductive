@@ -79,7 +79,7 @@ export const SignInCardContent = () => {
     <CardContent>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7">
-          <ProviderSignInBtns signInCard onLoading={setIsLoading} />
+          {/* <ProviderSignInBtns signInCard onLoading={setIsLoading} /> */}
           <div className="space-y-1.5">
             <FormField
               control={form.control}

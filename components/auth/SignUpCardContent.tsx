@@ -81,7 +81,7 @@ export const SignUpCardContent = () => {
     <CardContent>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7">
-          <ProviderSignInBtns disabled={isLoading} onLoading={setIsLoading} />
+          {/* <ProviderSignInBtns disabled={isLoading} onLoading={setIsLoading} /> */}
           <div className="space-y-1.5">
             <FormField
               control={form.control}
