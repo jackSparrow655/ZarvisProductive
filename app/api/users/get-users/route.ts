@@ -33,6 +33,7 @@ export const GET = async (request: Request) => {
         username: user.username,
         image: user.image,
         userRole: user.subscriptions[0].userRole,
+        //@ts-ignore
         lastTimeActive: user.lastTimeActive,
       };
     });
