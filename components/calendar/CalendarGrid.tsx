@@ -26,7 +26,7 @@ export const CalendarGrid = ({
       <div className="w-full h-full flex flex-col gap-3">
         <div className="w-full grid grid-cols-7 text-right">
           {daysOfWeek.map((day, index) => (
-            <p className="mr-2 font-semibold text-sm">{t(day)}</p>
+            <p className="mr-2 font-semibold text-sm" key={index}>{t(day)}</p>
           ))}
         </div>
         <div className="w-full h-full grid grid-cols-7 grid-rows-5">
@@ -37,6 +37,7 @@ export const CalendarGrid = ({
                   monthIndex={monthIndex}
                   day={day}
                   calendarItems={calendarItems}
+                  key={idx}
                 />
               ))}
             </Fragment>
