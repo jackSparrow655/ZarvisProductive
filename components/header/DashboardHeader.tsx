@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { SavingStatus } from "./SavingStatus";
 import { BackBtn } from "./BackBtn";
 import { NotificationContainer } from "../notifications/NotificationContainer";
+import { GeminiChatButton } from "../chatBot/Chatbot";
 
 interface Props {
   addManualRoutes?: {
@@ -65,7 +66,7 @@ export const DashboardHeader = async ({
           {children}
           <NotificationContainer userId={session.user.id} />
         </div>
-
+        <GeminiChatButton />
         <User
           profileImage={session?.user.image}
           username={session.user.username!}

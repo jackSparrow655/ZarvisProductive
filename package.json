@@ -12,6 +12,7 @@
     "@auth/prisma-adapter": "^2.7.2",
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
+    "@google/generative-ai": "^0.24.1",
     "@hookform/resolvers": "^3.9.1",
     "@mantine/hooks": "^7.13.5",
     "@prisma/client": "^6.19.0",
@@ -76,8 +77,10 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "19.0.0-rc-69d4b800-20241021",
     "react-hook-form": "^7.53.1",
+    "react-markdown": "^10.1.0",
     "react-textarea-autosize": "^8.5.4",
     "reactflow": "^11.11.4",
+    "remark-gfm": "^4.0.1",
     "tailwind-merge": "^2.5.4",
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss-animate": "^1.0.7",
@@ -89,7 +92,7 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.15",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/bcrypt": "^5.0.2",
     "@types/howler": "^2.2.12",
     "@types/node": "^20",
