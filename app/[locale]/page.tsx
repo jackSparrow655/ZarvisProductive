@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 const Home = () => {
   const session = useSession();
 
-  // if (session) redirect("/dashboard");
+  if (session) redirect("/dashboard");
 
   return <HomePage />;
 };
