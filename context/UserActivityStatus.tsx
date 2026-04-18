@@ -1,7 +1,7 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabase";
+// import { supabase } from "@/lib/supabase";
 import { UserActiveItemList } from "@/types/extended";
 import { UserPermission } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
@@ -76,46 +76,46 @@ export const UserActivityStatusProvider = ({ children }: Props) => {
     queryKey: ["getUserActivityStatus", workspaceId],
   });
 
-  useEffect(() => {
-    if (!session.data) return;
+  // useEffect(() => {
+  //   if (!session.data) return;
 
-    const supabaseClient = supabase();
-    const channel = supabaseClient.channel(`activity-status`);
-    channel
-      .on("presence", { event: "sync" }, () => {
-        const userIds: string[] = [];
+  //   const supabaseClient = supabase();
+  //   const channel = supabaseClient.channel(`activity-status`);
+  //   channel
+  //     .on("presence", { event: "sync" }, () => {
+  //       const userIds: string[] = [];
 
-        const activeUsers: UserActiveItemList[] = [];
-        const inactiveUsers: UserActiveItemList[] = [];
+  //       const activeUsers: UserActiveItemList[] = [];
+  //       const inactiveUsers: UserActiveItemList[] = [];
 
-        for (const id in channel.presenceState()) {
-          //@ts-ignore
-          userIds.push(channel.presenceState()[id][0].userId);
-        }
+  //       for (const id in channel.presenceState()) {
+  //         //@ts-ignore
+  //         userIds.push(channel.presenceState()[id][0].userId);
+  //       }
 
-        const uniqueIds = new Set(userIds);
+  //       const uniqueIds = new Set(userIds);
 
-        users &&
-          users.forEach((user) => {
-            if (uniqueIds.has(user.id)) {
-              activeUsers.push(user);
-            } else {
-              inactiveUsers.push(user);
-            }
-          });
+  //       users &&
+  //         users.forEach((user) => {
+  //           if (uniqueIds.has(user.id)) {
+  //             activeUsers.push(user);
+  //           } else {
+  //             inactiveUsers.push(user);
+  //           }
+  //         });
 
-        setAllActiveUsers(activeUsers);
-        setAllInactiveUsers(inactiveUsers);
-      })
-      .subscribe(async (status) => {
-        if (status === "SUBSCRIBED") {
-          await channel.track({
-            online_at: new Date().toISOString(),
-            userId: session.data.user.id,
-          });
-        }
-      });
-  }, [session.data, users]);
+  //       setAllActiveUsers(activeUsers);
+  //       setAllInactiveUsers(inactiveUsers);
+  //     })
+  //     .subscribe(async (status) => {
+  //       if (status === "SUBSCRIBED") {
+  //         await channel.track({
+  //           online_at: new Date().toISOString(),
+  //           userId: session.data.user.id,
+  //         });
+  //       }
+  //     });
+  // }, [session.data, users]);
 
   const getActiveUsersRoleType = useCallback(
     (role: UserPermission) => {

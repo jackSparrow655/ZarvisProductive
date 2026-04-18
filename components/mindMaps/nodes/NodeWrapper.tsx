@@ -146,12 +146,12 @@ export const NodeWrapper = ({
         <>
           <Handle
             type="target"
-            position={Position.Left}
+            position={Position.Top}
             className={`transition-colors !border-popover duration-200 p-1`}
           />
           <Handle
             type="source"
-            position={Position.Right}
+            position={Position.Bottom}
             className={`transition-colors !border-popover duration-200 p-1`}
           />
         </>

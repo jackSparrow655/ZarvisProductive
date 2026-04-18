@@ -10,6 +10,7 @@ interface AutoSaveMindMapContext {
   onSave: () => void;
   setRfInstance: React.Dispatch<React.SetStateAction<ReactFlowInstance | null>>;
   onSetIds: (mindMapId: string, workspaceId: string) => void;
+  rfInstance: ReactFlowInstance | null;
 }
 
 interface Props {
@@ -54,7 +55,6 @@ export const AutoSaveMindMapProvider = ({ children }: Props) => {
   const onSave = useCallback(() => {
     //@ts-ignore
     if (rfInstance && ids) {
-      console.log("Coming inside");
       const flow = rfInstance?.toObject();
       //@ts-ignore
       updateMindMap(flow);
@@ -66,7 +66,7 @@ export const AutoSaveMindMapProvider = ({ children }: Props) => {
   }, []);
 
   return (
-    <AutoSaveMindMapCtx.Provider value={{ setRfInstance, onSave, onSetIds }}>
+    <AutoSaveMindMapCtx.Provider value={{ setRfInstance, onSave, onSetIds, rfInstance }}>
       {children}
     </AutoSaveMindMapCtx.Provider>
   );

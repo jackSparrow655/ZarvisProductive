@@ -9,6 +9,7 @@ import ReactFlow, {
   applyEdgeChanges,
   applyNodeChanges,
   Background,
+  BackgroundVariant,
   Controls,
   Edge,
   EdgeTypes,
@@ -80,7 +81,9 @@ export const MindMap = ({
   const [isEditable, setIsEditable] = useState(canEdit);
   const t = useTranslations("MIND_MAP");
 
-  const { setRfInstance, onSave, onSetIds } = useAutoSaveMindMap();
+  const { setRfInstance, onSave, onSetIds, rfInstance } = useAutoSaveMindMap();
+  console.log("rfInstance = ", rfInstance?.toObject());
+
   const { onSetStatus, status } = useAutosaveIndicator();
 
   const debouncedMindMapInfo = useDebouncedCallback(() => {
@@ -299,7 +302,7 @@ export const MindMap = ({
             </Panel>
           )}
 
-          <Background />
+          <Background variant={BackgroundVariant.Dots} className="bg-black" color="" />
         </ReactFlow>
       </div>
     </div>

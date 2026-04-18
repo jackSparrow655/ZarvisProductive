@@ -30,7 +30,7 @@ const workspaceName = z
   .string()
   .min(2, "SCHEMA.WORKSPACE.SHORT")
   .max(20, "SCHEMA.WORKSPACE.LONG")
-  .refine((username) => /^[a-zA-Z0-9]+$/.test(username), {
+  .refine((username) => /^[a-zA-Z0-9 ]+$/.test(username), {
     message: "SCHEMA.WORKSPACE.SPECIAL_CHARS",
   });
 
