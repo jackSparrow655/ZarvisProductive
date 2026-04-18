@@ -141,35 +141,48 @@ function GeminiChatBox({ open, onClose }: GeminiChatBoxProps) {
     e?.preventDefault();
     if (!input.trim() || isProcessing) return;
 
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      role: "user",
-      text: input,
-    };
-    setMessages((prev) => [...prev, userMessage]);
+    const userId = crypto.randomUUID();
+    const assistantId = crypto.randomUUID();
+
+    setMessages((prev) => [
+      ...prev,
+      { id: userId, role: "user", text: input },
+      { id: assistantId, role: "assistant", text: "" },
+    ]);
+
+    const currentInput = input;
     setInput("");
     setIsProcessing(true);
 
     try {
-      const res = await axios.post("/api/chat", { message: input });
-      const reply =
-        res.data.reply ||
-        "Sorry, I couldn't find an answer for that right now.";
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        body: JSON.stringify({ message: currentInput }),
+      });
 
-      setMessages((prev) => [
-        ...prev,
-        { id: Date.now().toString(), role: "assistant", text: reply },
-      ]);
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) return;
+
+      let accumulatedText = "";
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        accumulatedText += decoder.decode(value);
+
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === assistantId && msg.role === "assistant"
+              ? { ...msg, text: accumulatedText }
+              : msg
+          )
+        );
+      }
     } catch (err) {
       console.error(err);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now().toString(),
-          role: "assistant",
-          text: "⚠️ Something went wrong. Please try again.",
-        },
-      ]);
     } finally {
       setIsProcessing(false);
     }

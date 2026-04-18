@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(req: Request) {
@@ -9,35 +8,45 @@ export async function POST(req: Request) {
       throw new Error("Missing GEMINI_API_KEY");
     }
 
-    if (!message) {
-      return NextResponse.json(
-        { error: "Message is required" },
-        { status: 400 }
-      );
-    }
-
-    // Initialize Gemini API client (v1)
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); // ✅ free & available in v1
-    console.log("api key = ", process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
+    });
 
-    const prompt = `You are a helpful AI study assistant for students.
-    Only answer educational or study-related questions.
-    Question: ${message}`;
+    const prompt = `
+You are a helpful AI study assistant.
 
-    // Generate response
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
+Rules:
+1. Answer the user's question clearly.
+2. Then ask ONE short follow-up question to help the user learn better.
+3. If the question seems confusing, ask for clarification.
+4. If the user seems stressed or unsure, be encouraging.
 
-    return NextResponse.json({ reply: text });
-  } catch (error: any) {
-    console.error("Gemini API Error:", error);
-    return NextResponse.json(
+User Question:
+${message}
+`;
+
+    const stream = await model.generateContentStream(prompt);
+
+    const encoder = new TextEncoder();
+
+    return new Response(
+      new ReadableStream({
+        async start(controller) {
+          for await (const chunk of stream.stream) {
+            const text = chunk.text();
+            controller.enqueue(encoder.encode(text));
+          }
+          controller.close();
+        },
+      }),
       {
-        error: "Internal Server Error",
-        details: error.message || "Unknown error",
-      },
-      { status: 500 }
+        headers: {
+          "Content-Type": "text/plain",
+        },
+      }
     );
+  } catch (error: any) {
+    return new Response("Error occurred", { status: 500 });
   }
 }
