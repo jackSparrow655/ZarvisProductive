@@ -18,7 +18,7 @@ import { ACTIVITY_PER_PAGE } from "./constants";
 export const domain =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
-    : "https://zarvis-productive.vercel.app/dashboard";
+    : "https://zarvis-productive.vercel.app";
 
 export const getWorkspace = async (workspace_id: string, userId: string) => {
   const res = await fetch(
