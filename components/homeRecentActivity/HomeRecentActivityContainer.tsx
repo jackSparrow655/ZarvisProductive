@@ -14,6 +14,7 @@ import { LoadingState } from "../ui/loadingState";
 import { HomeRecentActivityItem } from "./HomeRecentActivityItem";
 import { ACTIVITY_PER_PAGE } from "@/lib/constants";
 import { Activity } from "lucide-react";
+import { useTasks } from "@/store/tasks";
 
 interface Props {
   userId: string;
@@ -28,6 +29,7 @@ export const HomeRecentActivityContainer = ({ userId, initialData }: Props) => {
   const [isAllFetched, setIsAllFetched] = useState(false);
 
   const lastActivityItem = useRef<null | HTMLDivElement>(null);
+  const { addTasks } = useTasks();
 
   const { entry, ref } = useIntersection({
     root: lastActivityItem.current,
@@ -43,6 +45,7 @@ export const HomeRecentActivityContainer = ({ userId, initialData }: Props) => {
           `/api/home-page/get?userId=${userId}&page=${pageParam}&take=${ACTIVITY_PER_PAGE}`
         );
         const posts = (await res.json()) as HomeRecentActivity[];
+        addTasks(posts)
         return posts;
       },
       getNextPageParam: (_, pages) => {

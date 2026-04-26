@@ -20,6 +20,7 @@ export async function POST(request: Request) {
   const body: unknown = await request.json();
 
   const result = onboardingSchema.safeParse(body);
+  console.log(JSON.stringify(result))
 
   if (!result.success) {
     return NextResponse.json("ERRORS.WRONG_DATA", { status: 401 });

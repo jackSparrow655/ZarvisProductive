@@ -11,8 +11,7 @@ export const onboardingSchema = z.object({
     ),
   workspaceName: z
     .string()
-    .min(4)
-    .refine((username) => /^[a-zA-Z0-9]+$/.test(username)),
+    .min(4),
   workspaceImage: z.string().optional().nullable(),
 });
 

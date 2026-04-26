@@ -43,7 +43,7 @@ export const apiWorkspaceSchema = z.object({
   workspaceName: z
     .string()
     .min(4, "SCHEMA.WORKSPACE.SHORT")
-    .refine((username) => /^[a-zA-Z0-9]+$/.test(username), {
+    .refine((username) => /^[a-zA-Z0-9 ]+$/.test(username), {
       message: "SCHEMA.WORKSPACE.SPECIAL_CHARS",
     }),
   file: z.string().optional().nullable(),

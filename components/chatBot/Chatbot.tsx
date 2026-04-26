@@ -1,90 +1,4 @@
-// "use client";
-
-// import { useState } from "react";
-// import axios from "axios";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Card } from "@/components/ui/card";
-// import ReactMarkdown from "react-markdown";
-// import remarkGfm from "remark-gfm";
-
-// export default function Home() {
-//   const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
-//     []
-//   );
-//   const [input, setInput] = useState("");
-//   const [loading, setLoading] = useState(false);
-
-//   const sendMessage = async () => {
-//     if (!input.trim()) return;
-
-//     const userMessage = { sender: "user", text: input };
-//     setMessages((prev) => [...prev, userMessage]);
-//     setInput("");
-//     setLoading(true);
-
-//     try {
-//       const res = await axios.post("/api/chat", { message: input });
-//       const reply = res.data.reply || "No response from AI.";
-//       setMessages((prev) => [...prev, { sender: "bot", text: reply }]);
-//     } catch (err: any) {
-//       console.error("Chat error:", err.response?.data || err.message);
-//       setMessages((prev) => [
-//         ...prev,
-//         {
-//           sender: "bot",
-//           text: "⚠️ Something went wrong. Check the console for details.",
-//         },
-//       ]);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <Card className="w-full max-w-lg p-6 space-y-4">
-//       <h1 className="text-2xl font-semibold text-center">🎓 Study Buddy</h1>
-
-//       <div className="h-96 overflow-y-auto border rounded-md p-4 bg-white">
-//         {messages.map((msg, i) => (
-//           <div
-//             key={i}
-//             className={`mb-3 ${
-//               msg.sender === "user" ? "text-right" : "text-left"
-//             }`}
-//           >
-//             {msg.sender === "user" ? (
-//               <p className="inline-block px-3 py-2 rounded-lg bg-blue-500 text-white whitespace-pre-line">
-//                 {msg.text}
-//               </p>
-//             ) : (
-//               <div className="inline-block px-3 py-2 rounded-lg bg-gray-100 text-gray-900 prose prose-sm max-w-none">
-//                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
-//                   {msg.text}
-//                 </ReactMarkdown>
-//               </div>
-//             )}
-//           </div>
-//         ))}
-
-//         {loading && <p className="text-center text-gray-500">Thinking...</p>}
-//       </div>
-
-//       <div className="flex gap-2">
-//         <Input
-//           placeholder="Ask a study question..."
-//           value={input}
-//           onChange={(e) => setInput(e.target.value)}
-//           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-//         />
-//         <Button onClick={sendMessage}>Send</Button>
-//       </div>
-//     </Card>
-//   );
-// }
-
 "use client";
-//@ts-nocheck
 
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
@@ -94,6 +8,7 @@ import { Bot, Expand, Minimize, Send, Trash, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { useTasks } from "@/store/tasks";
 
 export function GeminiChatButton() {
   const [chatOpen, setChatOpen] = useState(false);
@@ -132,6 +47,7 @@ function GeminiChatBox({ open, onClose }: GeminiChatBoxProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { tasks } = useTasks();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -157,7 +73,7 @@ function GeminiChatBox({ open, onClose }: GeminiChatBoxProps) {
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
-        body: JSON.stringify({ message: currentInput }),
+        body: JSON.stringify({ message: currentInput, taskDetails: tasks }),
       });
 
       const reader = res.body?.getReader();
